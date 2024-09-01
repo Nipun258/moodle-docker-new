@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - moodle_net
+
+  moodle:
+    image: aesr/moodle
+    container_name: my-moodle
+    ports:
+      - "8083:80"
+    environment:
+      MOODLE_DB_TYPE: mysqli
+      MOODLE_DB_HOST: mysql
+      MOODLE_DB_NAME: moodle
+      MOODLE_DB_USER: root
+      MOODLE_DB_PASSWORD: password
+    volumes:
+      - moodledata:/var/www/moodledata
+    networks:
+      - moodle_net
+
+networks:
+  moodle_net:
+
+volumes:
+  mysql_data:
+  moodledata:
